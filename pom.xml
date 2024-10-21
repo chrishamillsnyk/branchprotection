@@ -1,0 +1,715 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<modelVersion>4.0.0</modelVersion>
+<groupId>com.pearson.paf.repo</groupId>
+<artifactId>paf-repo</artifactId>
+<version>1.17.23</version>
+<packaging>war</packaging>
+<name>paf-repo</name>
+<url>http://maven.apache.org</url>
+ 
+	<scm>
+<connection>scm:git:git@gitlab.com:pearsontechnology/gpt/pla/yetiapps/apps/paf-repo.git</connection>
+<developerConnection>scm:git:git@gitlab.com:pearsontechnology/gpt/pla/yetiapps/apps/paf-repo.git</developerConnection>
+</scm>
+ 
+	<properties>
+<java-version>1.8</java-version>
+<org.springframework-version>4.2.6.RELEASE</org.springframework-version>
+<spring.security.version>4.1.0.RELEASE</spring.security.version>
+<org.aspectj-version>1.6.9</org.aspectj-version>
+<org.slf4j-version>1.7.15</org.slf4j-version>
+<jersey-version>1.19.1</jersey-version>
+<jackson-version>2.10.2</jackson-version>
+<spring-mongo-version>1.10.4.RELEASE</spring-mongo-version>
+<mongodb.version>3.4.2</mongodb.version>
+ 
+		<!-- For About.jsp -->
+<!-- buildnum value will be overridden by Jenkins -->
+<jenkins.buildNumber>${env.BUILD_NUMBER}</jenkins.buildNumber>
+<pom.version>${project.version}</pom.version>
+<maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+<builddate>${maven.build.timestamp}</builddate>
+</properties>
+ 
+	<dependencies>
+ 
+		<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-core -->
+<dependency>
+<groupId>com.amazonaws</groupId>
+<artifactId>aws-java-sdk-core</artifactId>
+<version>1.12.42</version>
+</dependency>
+ 
+		<!--Swagger dependencies -->
+<dependency>
+<groupId>io.swagger</groupId>
+<artifactId>swagger-jersey-jaxrs</artifactId>
+<version>1.5.9</version>
+<exclusions>
+<exclusion>
+<groupId>com.fasterxml.jackson.core</groupId>
+<artifactId>jackson-core</artifactId>
+</exclusion>
+<exclusion>
+<groupId>com.fasterxml.jackson.core</groupId>
+<artifactId>jackson-databind</artifactId>
+</exclusion>
+<exclusion>
+<groupId>com.fasterxml.jackson.dataformat</groupId>
+<artifactId>jackson-dataformat-xml</artifactId>
+</exclusion>
+</exclusions>
+</dependency>
+ 
+		<dependency>
+<groupId>com.fasterxml.jackson.core</groupId>
+<artifactId>jackson-core</artifactId>
+<version>${jackson-version}</version>
+</dependency>
+ 
+		<dependency>
+<groupId>com.fasterxml.jackson.dataformat</groupId>
+<artifactId>jackson-dataformat-cbor</artifactId>
+<version>${jackson-version}</version>
+</dependency>
+ 
+		<dependency>
+<groupId>com.fasterxml.jackson.dataformat</groupId>
+<artifactId>jackson-dataformat-xml</artifactId>
+<version>${jackson-version}</version>
+</dependency>
+ 
+		<dependency>
+<groupId>com.fasterxml.jackson.core</groupId>
+<artifactId>jackson-databind</artifactId>
+<version>${jackson-version}</version>
+</dependency>
+ 
+		<dependency>
+<groupId>com.pearson.paf.common</groupId>
+<artifactId>paf-common</artifactId>
+<version>1.10.0</version>
+<!-- <exclusions> <exclusion> <artifactId>org.codehaus.jettison</artifactId> 
+<groupId>jettison</groupId> </exclusion> </exclusions> -->
+<exclusions>
+<exclusion>
+<groupId>com.fasterxml.jackson.core</groupId>
+<artifactId>jackson-core</artifactId>
+</exclusion>
+<exclusion>
+<groupId>com.fasterxml.jackson.core</groupId>
+<artifactId>jackson-databind</artifactId>
+</exclusion>
+</exclusions>
+</dependency>
+ 
+		<dependency>
+<groupId>javax.servlet</groupId>
+<artifactId>javax.servlet-api</artifactId>
+<version>3.1.0</version>
+<scope>provided</scope>
+</dependency>
+ 
+		<!-- Jersey -->
+ 
+		<dependency>
+<groupId>commons-io</groupId>
+<artifactId>commons-io</artifactId>
+<version>2.5</version>
+</dependency>
+ 
+		<dependency>
+<groupId>commons-fileupload</groupId>
+<artifactId>commons-fileupload</artifactId>
+<version>1.2.2</version>
+</dependency>
+ 
+		<dependency>
+<groupId>commons-configuration</groupId>
+<artifactId>commons-configuration</artifactId>
+<version>1.6</version>
+</dependency>
+ 
+		<dependency>
+<groupId>com.amazonaws</groupId>
+<artifactId>aws-java-sdk-secretsmanager</artifactId>
+<version>1.11.543</version>
+<exclusions>
+<exclusion>
+<groupId>com.fasterxml.jackson.core</groupId>
+<artifactId>jackson-core</artifactId>
+</exclusion>
+<exclusion>
+<groupId>com.fasterxml.jackson.dataformat</groupId>
+<artifactId>jackson-dataformat-cbor</artifactId>
+</exclusion>
+<exclusion>
+<groupId>com.fasterxml.jackson.core</groupId>
+<artifactId>jackson-databind</artifactId>
+</exclusion>
+</exclusions>
+</dependency>
+ 
+		<dependency>
+<groupId>org.apache.httpcomponents</groupId>
+<artifactId>httpclient</artifactId>
+<version>4.5.2</version>
+</dependency>
+ 
+		<dependency>
+<groupId>com.pearson.autobahn</groupId>
+<artifactId>autobahn-producer-sdk</artifactId>
+<version>5.0.26</version>
+<!-- <version>1.1.51</version> -->
+<exclusions>
+<exclusion>
+<groupId>com.fasterxml.jackson.core</groupId>
+<artifactId>jackson-core</artifactId>
+</exclusion>
+<exclusion>
+<groupId>com.fasterxml.jackson.dataformat</groupId>
+<artifactId>jackson-dataformat-cbor</artifactId>
+</exclusion>
+<exclusion>
+<groupId>com.fasterxml.jackson.core</groupId>
+<artifactId>jackson-databind</artifactId>
+</exclusion>
+</exclusions>
+</dependency>
+ 
+ 
+		<!-- Spring dependencies -->
+<dependency>
+<groupId>org.springframework</groupId>
+<artifactId>spring-core</artifactId>
+<version>${org.springframework-version}</version>
+</dependency>
+ 
+		<dependency>
+<groupId>org.springframework</groupId>
+<artifactId>spring-context</artifactId>
+<version>${org.springframework-version}</version>
+<exclusions>
+<exclusion>
+<groupId>commons-logging</groupId>
+<artifactId>commons-logging</artifactId>
+</exclusion>
+</exclusions>
+</dependency>
+ 
+		<dependency>
+<groupId>org.springframework</groupId>
+<artifactId>spring-web</artifactId>
+<version>${org.springframework-version}</version>
+</dependency>
+ 
+		<dependency>
+<groupId>org.springframework</groupId>
+<artifactId>spring-test</artifactId>
+<version>${org.springframework-version}</version>
+</dependency>
+<dependency>
+<groupId>org.springframework</groupId>
+<artifactId>spring-webmvc</artifactId>
+<version>${org.springframework-version}</version>
+</dependency>
+ 
+		<dependency>
+<groupId>org.springframework</groupId>
+<artifactId>spring-tx</artifactId>
+<version>${org.springframework-version}</version>
+</dependency>
+ 
+		<dependency>
+<groupId>org.springframework.security</groupId>
+<artifactId>spring-security-core</artifactId>
+<version>${spring.security.version}</version>
+</dependency>
+ 
+		<dependency>
+<groupId>org.springframework.security</groupId>
+<artifactId>spring-security-web</artifactId>
+<version>${spring.security.version}</version>
+</dependency>
+ 
+		<dependency>
+<groupId>org.springframework.security</groupId>
+<artifactId>spring-security-config</artifactId>
+<version>${spring.security.version}</version>
+</dependency>
+ 
+		<dependency>
+<groupId>org.springframework.security.oauth</groupId>
+<artifactId>spring-security-oauth</artifactId>
+<version>2.0.9.RELEASE</version>
+</dependency>
+<!-- Jersey + Spring -->
+ 
+		<dependency>
+<groupId>com.sun.jersey</groupId>
+<artifactId>jersey-server</artifactId>
+<version>${jersey-version}</version>
+</dependency>
+<dependency>
+<groupId>com.sun.jersey</groupId>
+<artifactId>jersey-core</artifactId>
+<version>${jersey-version}</version>
+</dependency>
+<dependency>
+<groupId>asm</groupId>
+<artifactId>asm</artifactId>
+<version>3.1</version>
+</dependency>
+<dependency>
+<groupId>com.sun.jersey.contribs</groupId>
+<artifactId>jersey-spring</artifactId>
+<version>${jersey-version}</version>
+<exclusions>
+<exclusion>
+<groupId>org.springframework</groupId>
+<artifactId>spring</artifactId>
+</exclusion>
+<exclusion>
+<groupId>org.springframework</groupId>
+<artifactId>spring-core</artifactId>
+</exclusion>
+<exclusion>
+<groupId>org.springframework</groupId>
+<artifactId>spring-web</artifactId>
+</exclusion>
+<exclusion>
+<groupId>org.springframework</groupId>
+<artifactId>spring-beans</artifactId>
+</exclusion>
+<exclusion>
+<groupId>org.springframework</groupId>
+<artifactId>spring-context</artifactId>
+</exclusion>
+<exclusion>
+<groupId>org.springframework</groupId>
+<artifactId>spring-aop</artifactId>
+</exclusion>
+</exclusions>
+</dependency>
+<dependency>
+<groupId>org.slf4j</groupId>
+<artifactId>slf4j-api</artifactId>
+<version>${org.slf4j-version}</version>
+</dependency>
+<dependency>
+<groupId>org.slf4j</groupId>
+<artifactId>jcl-over-slf4j</artifactId>
+<version>${org.slf4j-version}</version>
+<scope>runtime</scope>
+</dependency>
+<dependency>
+<groupId>org.slf4j</groupId>
+<artifactId>slf4j-log4j12</artifactId>
+<version>${org.slf4j-version}</version>
+<scope>runtime</scope>
+</dependency>
+<dependency>
+<groupId>log4j</groupId>
+<artifactId>log4j</artifactId>
+<version>1.2.17</version>
+<exclusions>
+<exclusion>
+<groupId>javax.mail</groupId>
+<artifactId>mail</artifactId>
+</exclusion>
+<exclusion>
+<groupId>javax.jms</groupId>
+<artifactId>jms</artifactId>
+</exclusion>
+<exclusion>
+<groupId>com.sun.jdmk</groupId>
+<artifactId>jmxtools</artifactId>
+</exclusion>
+<exclusion>
+<groupId>com.sun.jmx</groupId>
+<artifactId>jmxri</artifactId>
+</exclusion>
+</exclusions>
+</dependency>
+<dependency>
+<groupId>log4j</groupId>
+<artifactId>apache-log4j-extras</artifactId>
+<version>1.2.17</version>
+</dependency>
+<!-- <dependency> <groupId>junit</groupId> <artifactId>junit</artifactId> 
+<version>4.7</version> </dependency> -->
+ 
+		<!-- <dependency> <groupId>com.fasterxml</groupId> <artifactId>jackson-xml-databind</artifactId> 
+<version>0.6.2</version> </dependency> -->
+<dependency>
+<groupId>org.apache.xmlbeans</groupId>
+<artifactId>xmlbeans-xmlpublic</artifactId>
+<version>2.6.0</version>
+</dependency>
+ 
+		<dependency>
+<groupId>commons-validator</groupId>
+<artifactId>commons-validator</artifactId>
+<version>1.5.1</version>
+</dependency>
+ 
+		<dependency>
+<groupId>org.springframework.data</groupId>
+<artifactId>spring-data-mongodb</artifactId>
+<version>${spring-mongo-version}</version>
+<exclusions>
+<exclusion>
+<groupId>org.mongodb</groupId>
+<artifactId>mongo-java-driver</artifactId>
+</exclusion>
+</exclusions>
+</dependency>
+ 
+		<dependency>
+<groupId>org.mongodb</groupId>
+<artifactId>mongo-java-driver</artifactId>
+<version>${mongodb.version}</version>
+</dependency>
+ 
+		<dependency>
+<groupId>com.pearson.ed.ltg</groupId>
+<artifactId>oauth-util</artifactId>
+<version>2.1-SNAPSHOT</version>
+</dependency>
+ 
+		<dependency><!-- pi authentication, Authenticator -->
+<groupId>com.pearson.ed.ltg.piam</groupId>
+<artifactId>authentication-filter</artifactId>
+<version>3.52.7</version>
+<exclusions>
+<exclusion>
+<groupId>javax.servlet</groupId>
+<artifactId>servlet-api</artifactId>
+</exclusion>
+<exclusion>
+<groupId>javax.servlet</groupId>
+<artifactId>httpclient</artifactId>
+</exclusion>
+<exclusion>
+<groupId>org.apache.logging.log4j</groupId>
+<artifactId>log4j-core</artifactId>
+</exclusion>
+<exclusion>
+<groupId>org.apache.logging.log4j</groupId>
+<artifactId>log4j-api</artifactId>
+</exclusion>
+</exclusions>
+</dependency>
+<dependency>
+<groupId>org.apache.logging.log4j</groupId>
+<artifactId>log4j-core</artifactId>
+<version>2.17.0</version>
+</dependency>
+<dependency>
+<groupId>org.apache.logging.log4j</groupId>
+<artifactId>log4j-api</artifactId>
+<version>2.17.0</version>
+</dependency>
+<dependency><!-- pi system-authenticator -->
+<groupId>com.pearson.ed.ltg.piam</groupId>
+<artifactId>system-authenticator</artifactId>
+<version>3.52.7</version>
+<exclusions>
+<exclusion>
+<groupId>javax.servlet</groupId>
+<artifactId>servlet-api</artifactId>
+</exclusion>
+<exclusion>
+<groupId>javax.servlet</groupId>
+<artifactId>httpclient</artifactId>
+</exclusion>
+</exclusions>
+</dependency>
+ 
+		<!-- Unit test dependencies -->
+<dependency>
+<groupId>junit</groupId>
+<artifactId>junit</artifactId>
+<version>4.12</version>
+<scope>test</scope>
+</dependency>
+<dependency>
+<groupId>com.sun.jersey.jersey-test-framework</groupId>
+<artifactId>jersey-test-framework-grizzly2</artifactId>
+<version>${jersey-version}</version>
+<scope>test</scope>
+</dependency>
+<dependency>
+<groupId>org.mockito</groupId>
+<artifactId>mockito-core</artifactId>
+<version>1.10.19</version>
+</dependency>
+ 
+		<!-- Jersey multipart support -->
+<dependency>
+<groupId>com.sun.jersey.contribs</groupId>
+<artifactId>jersey-multipart</artifactId>
+<version>${jersey-version}</version>
+</dependency>
+<dependency>
+<groupId>com.sun.jersey</groupId>
+<artifactId>jersey-client</artifactId>
+<version>${jersey-version}</version>
+</dependency>
+ 
+		<dependency>
+<groupId>net.lingala.zip4j</groupId>
+<artifactId>zip4j</artifactId>
+<version>1.3.2</version>
+</dependency>
+ 
+		<dependency>
+<groupId>com.sun.jersey</groupId>
+<artifactId>jersey-json</artifactId>
+<version>${jersey-version}</version>
+<exclusions>
+<exclusion>
+<artifactId>org.codehaus.jettison</artifactId>
+<groupId>jettison</groupId>
+</exclusion>
+<exclusion>
+<artifactId>org.codehaus.jackson</artifactId>
+<groupId>jackson-core-asl</groupId>
+</exclusion>
+<exclusion>
+<artifactId>org.codehaus.jackson</artifactId>
+<groupId>jackson-mapper-asl</groupId>
+</exclusion>
+<exclusion>
+<artifactId>org.codehaus.jackson</artifactId>
+<groupId>jackson-jaxrs</groupId>
+</exclusion>
+</exclusions>
+</dependency>
+ 
+		<dependency>
+<groupId>com.theoryinpractise</groupId>
+<artifactId>halbuilder-standard</artifactId>
+<version>4.0.1</version>
+<exclusions>
+<exclusion>
+<groupId>com.fasterxml.jackson.core</groupId>
+<artifactId>jackson-core</artifactId>
+</exclusion>
+<exclusion>
+<groupId>com.fasterxml.jackson.core</groupId>
+<artifactId>jackson-databind</artifactId>
+</exclusion>
+</exclusions>
+</dependency>
+ 
+		<!-- CORS Filter -->
+<dependency>
+<groupId>org.ebaysf.web</groupId>
+<artifactId>cors-filter</artifactId>
+<version>1.0.0</version>
+<exclusions>
+<exclusion>
+<groupId>javax.servlet</groupId>
+<artifactId>servlet-api</artifactId>
+</exclusion>
+</exclusions>
+</dependency>
+ 
+ 
+	</dependencies>
+ 
+	<!-- Repositories for artifacts in Nexus -->
+<distributionManagement>
+<repository>
+<id>Pearson-Nexus-Releases</id>
+<name>Pearson-Nexus-Releases</name>
+<url>https://nexus.releng.pearsondev.com/repository/releases/</url>
+</repository>
+<snapshotRepository>
+<id>Pearson-Nexus-Snapshots</id>
+<name>Pearson-Nexus-Snapshots</name>
+<url>https://nexus.releng.pearsondev.com/repository/snapshots/</url>
+</snapshotRepository>
+</distributionManagement>
+ 
+	<build>
+<resources>
+<resource>
+<directory>src/main/resources</directory>
+<filtering>true</filtering>
+</resource>
+</resources>
+<plugins>
+<!-- <plugin> <groupId>org.jsonschema2pojo</groupId> <artifactId>jsonschema2pojo-maven-plugin</artifactId> 
+<version>0.4.34</version> <configuration> <sourceDirectory>${basedir}/src/main/resources/schema</sourceDirectory> 
+<targetPackage>com.pearson.paf.repo.autobahn.model</targetPackage> <useCommonsLang3>true</useCommonsLang3> 
+</configuration> <executions> <execution> <goals> <goal>generate</goal> </goals> 
+</execution> </executions> </plugin> -->
+<plugin>
+<groupId>org.apache.maven.plugins</groupId>
+<artifactId>maven-compiler-plugin</artifactId>
+<version>3.5.1</version>
+<configuration>
+<source>${java-version}</source>
+<target>${java-version}</target>
+</configuration>
+</plugin>
+<plugin>
+<groupId>org.apache.maven.plugins</groupId>
+<artifactId>maven-war-plugin</artifactId>
+<version>2.6</version>
+<configuration>
+<webResources>
+<resource>
+<directory>src/main/webapp</directory>
+<excludes>
+<exclude>jsp/About.jsp</exclude>
+</excludes>
+</resource>
+<resource>
+<directory>src/main/webapp</directory>
+<filtering>true</filtering>
+<includes>
+<include>jsp/About.jsp</include>
+</includes>
+</resource>
+</webResources>
+</configuration>
+</plugin>
+ 
+			<plugin>
+<groupId>com.googlecode.maven-download-plugin</groupId>
+<artifactId>download-maven-plugin</artifactId>
+<version>1.3.0</version>
+<executions>
+<execution>
+<id>swagger-ui</id>
+<goals>
+<goal>wget</goal>
+</goals>
+<configuration>
+<url>https://github.com/swagger-api/swagger-ui/archive/v2.1.3.tar.gz</url>
+<unpack>true</unpack>
+<outputDirectory>${project.build.directory}</outputDirectory>
+</configuration>
+</execution>
+</executions>
+</plugin>
+<plugin>
+<artifactId>maven-resources-plugin</artifactId>
+<version>3.0.0</version>
+<executions>
+<execution>
+<id>copy-resources</id>
+<phase>package</phase>
+<goals>
+<goal>copy-resources</goal>
+</goals>
+<configuration>
+<outputDirectory>target/${project.artifactId}-${project.version}</outputDirectory>
+<resources>
+<resource>
+<directory>${project.build.directory}/swagger-ui-2.1.3/dist</directory>
+<filtering>true</filtering>
+<excludes>
+<exclude>index.html</exclude>
+<exclude>css/style.css</exclude>
+</excludes>
+</resource>
+</resources>
+</configuration>
+</execution>
+</executions>
+</plugin>
+ 
+			<!-- <plugin> <groupId>org.jacoco</groupId> <artifactId>jacoco-maven-plugin</artifactId> 
+<version> 0.7.4.201502262128</version> <configuration> <dataFile>target/jacoco.exec</dataFile> 
+</configuration> <executions> <execution> <id>pre-unit-test</id> <goals> 
+<goal>prepare-agent</goal> </goals> <configuration> <propertyName>jacoco.agent.argLine</propertyName> 
+<destFile>target/jacoco.exec</destFile> </configuration> </execution> <execution> 
+<id>default-report</id> <phase>verify</phase> <goals> <goal>report</goal> 
+</goals> </execution> </executions> </plugin> -->
+<plugin>
+<groupId>org.jacoco</groupId>
+<artifactId>jacoco-maven-plugin</artifactId>
+<version>0.7.9</version>
+<executions>
+<execution>
+<id>jacoco-initialize</id>
+<goals>
+<goal>prepare-agent</goal>
+</goals>
+</execution>
+<execution>
+<id>jacoco-site</id>
+<phase>package</phase>
+<goals>
+<goal>report</goal>
+</goals>
+</execution>
+</executions>
+</plugin>
+<plugin>
+<groupId>org.codehaus.mojo</groupId>
+<artifactId>sonar-maven-plugin</artifactId>
+<version>3.2</version>
+</plugin>
+<plugin>
+<groupId>org.apache.maven.plugins</groupId>
+<artifactId>maven-surefire-plugin</artifactId>
+<version>2.19</version>
+<configuration>
+<!-- Skips unit tests if the value of skip.unit.tests property is true -->
+<skipTests>false</skipTests>
+<!-- Excludes integration tests when unit tests are run. -->
+<excludes>
+<exclude>**/integration/**</exclude>
+</excludes>
+</configuration>
+</plugin>
+ 
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-dependency-plugin</artifactId> 
+<executions> <execution> <id>install</id> <phase>install</phase> <goals> 
+<goal>sources</goal> </goals> </execution> </executions> </plugin> <plugin> 
+<groupId>org.apache.maven.plugins</groupId> <artifactId>maven-resources-plugin</artifactId> 
+<version>2.5</version> <configuration> <encoding>UTF-8</encoding> </configuration> 
+</plugin> -->
+</plugins>
+<pluginManagement>
+<plugins>
+<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+<plugin>
+<groupId>org.eclipse.m2e</groupId>
+<artifactId>lifecycle-mapping</artifactId>
+<version>1.0.0</version>
+<configuration>
+<lifecycleMappingMetadata>
+<pluginExecutions>
+<pluginExecution>
+<pluginExecutionFilter>
+<groupId>org.codehaus.mojo</groupId>
+<artifactId>jaxws-maven-plugin</artifactId>
+<versionRange>[1.10,)</versionRange>
+<goals>
+<goal>wsimport</goal>
+</goals>
+</pluginExecutionFilter>
+<action>
+<ignore></ignore>
+</action>
+</pluginExecution>
+</pluginExecutions>
+</lifecycleMappingMetadata>
+</configuration>
+</plugin>
+</plugins>
+</pluginManagement>
+</build>
+ 
+</project>
